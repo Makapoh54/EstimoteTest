@@ -38,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
     TextView mBeaconStatusTv;
     @BindView(R.id.beacon_distance_tv)
     TextView mBeaconDistanceTv;
+    @BindView(R.id.beacons_around_tv)
+    TextView mBeaconsAroundTv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,12 +51,13 @@ public class MainActivity extends AppCompatActivity {
         mRegion = new Region(
                 "monitored region",
                 UUID.fromString("B9407F30-F5F8-466E-AFF9-25556B57FE6D"),
-                21361, 12427);
+                null, null);
         mBeaconManager.connect(new BeaconManager.ServiceReadyCallback() {
             @Override
             public void onServiceReady() {
                 mBeaconManager.startMonitoring(mRegion);
                 mBeaconManager.startRanging(mRegion);
+                mBeaconManager.startNearableDiscovery();
             }
         });
 
@@ -79,14 +82,20 @@ public class MainActivity extends AppCompatActivity {
             public void onBeaconsDiscovered(Region region, List<Beacon> list) {
                 DecimalFormat f = new DecimalFormat("00.00");
                 if (!list.isEmpty()) {
+                    mBeaconStatusTv.setText("Entered");
+                    mBeaconStatusTv.setTextColor(ContextCompat.getColor(MainActivity.this, android.R.color.holo_green_light));
                     mBeaconDistanceTv.setText(Utils.computeProximity(list.get(0)).toString() + ": " + f.format(Utils.computeAccuracy(list.get(0))));
                     mBeaconDistanceTv.setTextColor(ContextCompat.getColor(MainActivity.this, android.R.color.holo_green_light));
                 } else {
+                    mBeaconStatusTv.setText("Left");
+                    mBeaconStatusTv.setTextColor(ContextCompat.getColor(MainActivity.this, android.R.color.holo_red_light));
                     mBeaconDistanceTv.setText("-");
                     mBeaconDistanceTv.setTextColor(ContextCompat.getColor(MainActivity.this, android.R.color.holo_red_light));
                 }
+                mBeaconsAroundTv.setText("Near: " + list.size());
             }
         });
+
     }
 
     @Override
