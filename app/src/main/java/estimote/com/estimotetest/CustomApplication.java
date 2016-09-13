@@ -4,10 +4,7 @@ import android.app.Application;
 
 import com.estimote.sdk.EstimoteSDK;
 
-import java.util.ArrayList;
-
 import estimote.com.estimotetest.estimote.BeaconNotificationsManager;
-import estimote.com.estimotetest.utils.Utils;
 
 public class CustomApplication extends Application {
 
@@ -33,20 +30,4 @@ public class CustomApplication extends Application {
 //        EstimoteSDK.enableDebugLogging(true);
     }
 
-    public void enableBeaconNotifications() {
-        if (mBeaconNotificationsManager != null) {
-            ArrayList<Notification> notificationList = Utils.getNotificationsFromSharedPreferences(this);
-            mBeaconNotificationsManager = new BeaconNotificationsManager(this);
-            for (Notification id : notificationList) {
-                mBeaconNotificationsManager.addNotification(id);
-            }
-            mBeaconNotificationsManager.startMonitoring();
-
-        }
-    }
-
-    public void addNotification(Notification notification) {
-        if (mBeaconNotificationsManager != null)
-            mBeaconNotificationsManager.addNotification(notification);
-    }
 }

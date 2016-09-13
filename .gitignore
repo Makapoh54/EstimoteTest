@@ -24,3 +24,5 @@ Thumbs.db
 .idea/datasources.xml
 .idea/dataSources.ids
 .idea/codeStyleSettings.xml
+/app/src/androidTest/java/estimote/com/estimotetest/
+/app/src/test/java/estimote/com/estimotetest/
