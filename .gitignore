@@ -26,3 +26,5 @@ Thumbs.db
 .idea/codeStyleSettings.xml
 /app/src/androidTest/java/estimote/com/estimotetest/
 /app/src/test/java/estimote/com/estimotetest/
+/.idea/gradle.xml
+/.idea/misc.xml
