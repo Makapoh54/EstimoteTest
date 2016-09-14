@@ -8,7 +8,7 @@ import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
-import com.estimote.sdk.MacAddress;
+import com.estimote.sdk.DeviceId;
 import com.estimote.sdk.Region;
 import com.estimote.sdk.SystemRequirementsChecker;
 
@@ -49,22 +49,22 @@ public class MainActivity extends AppCompatActivity {
             if (rawMsgs != null) {
                 for (int i = 0; i < rawMsgs.length; i++) {
                     NdefMessage msg = (NdefMessage) rawMsgs[i];
-                    MacAddress beaconMac = findBeaconId(msg);
-                    if (beaconMac != null) {
-                        BeaconManagerSingleton.getInstance().addBeaconMacToList(beaconMac);
+                    DeviceId beaconId = findBeaconId(msg);
+                    if (beaconId != null) {
+                        BeaconManagerSingleton.getInstance().checkTouchedBeaconConsistency(beaconId);
                     }
                 }
             }
         }
     }
 
-    private static MacAddress findBeaconId(NdefMessage msg) {
+    private static DeviceId findBeaconId(NdefMessage msg) {
         NdefRecord[] records = msg.getRecords();
         for (NdefRecord record : records) {
             if (record.getTnf() == NdefRecord.TNF_EXTERNAL_TYPE) {
                 String type = new String(record.getType(), Charset.forName("ascii"));
-                if ("estimote.com:mac".equals(type)) {
-                    return MacAddress.fromBytes(record.getPayload());
+                if ("estimote.com:id".equals(type)) {
+                    return DeviceId.fromBytes(record.getPayload());
                 }
             }
         }

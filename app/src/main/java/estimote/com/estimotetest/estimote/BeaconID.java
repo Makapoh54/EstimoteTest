@@ -1,5 +1,7 @@
 package estimote.com.estimotetest.estimote;
 
+import com.estimote.sdk.Beacon;
+import com.estimote.sdk.DeviceId;
 import com.estimote.sdk.Region;
 
 import java.util.UUID;
@@ -9,15 +11,21 @@ public class BeaconID {
     private UUID proximityUUID;
     private int major;
     private int minor;
+    private DeviceId deviceId;
 
-    public BeaconID(UUID proximityUUID, int major, int minor) {
+    public BeaconID(UUID proximityUUID, int major, int minor, DeviceId deviceId) {
         this.proximityUUID = proximityUUID;
         this.major = major;
         this.minor = minor;
+        this.deviceId = deviceId;
     }
 
-    public BeaconID(String UUIDString, int major, int minor) {
-        this(UUID.fromString(UUIDString), major, minor);
+    public BeaconID(String UUIDString, int major, int minor, DeviceId deviceId) {
+        this(UUID.fromString(UUIDString), major, minor, deviceId);
+    }
+
+    public BeaconID(Beacon beacon) {
+        this(beacon.getProximityUUID(), beacon.getMajor(), beacon.getMinor(), null);
     }
 
     public UUID getProximityUUID() {
@@ -30,6 +38,14 @@ public class BeaconID {
 
     public int getMinor() {
         return minor;
+    }
+
+    public DeviceId getDeviceId() {
+        return deviceId;
+    }
+
+    public BeaconID(DeviceId deviceId) {
+        this.deviceId = deviceId;
     }
 
     public Region toBeaconRegion() {

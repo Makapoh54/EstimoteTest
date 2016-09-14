@@ -40,10 +40,9 @@ public class Utils {
         return prefs.getString(key, "");
     }
 
-    public static void setNotificationFromSharedPreferences(@NonNull Context context, @NonNull ArrayList<Notification> notifcationList) {
+    private static void setNotificationFromSharedPreferences(@NonNull Context context, @NonNull ArrayList<Notification> notifcationList) {
         Gson gson = new Gson();
         String jsonNotification = gson.toJson(notifcationList);
-
         SharedPreferences prefs = context.getSharedPreferences(Utils.class.getSimpleName(), Context.MODE_PRIVATE);
         prefs.edit().putString("NotificationList", jsonNotification).apply();
     }
@@ -55,7 +54,7 @@ public class Utils {
         Type type = new TypeToken<List<Notification>>() {
         }.getType();
         notificationsList = gson.fromJson(prefs.getString("NotificationList", ""), type);
-        return notificationsList;
+        return notificationsList == null ? new ArrayList<Notification>() : notificationsList;
     }
 
     public static void clearNotificationListFromSharedPreferences(@NonNull Context context) {
@@ -63,17 +62,20 @@ public class Utils {
         prefs.edit().remove("NotificationList").apply();
     }
 
-    public static void addNotificationToSharedPreferences(@NonNull Context context, @NonNull BeaconID beacon) {
-        ArrayList<BeaconID> beaconList = new ArrayList<BeaconID>(getBeaconListFromSharedPreferences(context));
-        clearBeaconListFromSharedPreferences(context);
-        beaconList.add(beacon);
-        setBeaconListFromSharedPreferences(context, beaconList);
+    public static void addNotificationToSharedPreferences(@NonNull Context context, @NonNull Notification notification) {
+        ArrayList<Notification> notificationsList = getNotificationsFromSharedPreferences(context);
+        if (notificationsList != null) {
+            clearNotificationListFromSharedPreferences(context);
+        } else {
+            notificationsList = new ArrayList<>();
+        }
+        notificationsList.add(notification);
+        setNotificationFromSharedPreferences(context, notificationsList);
     }
 
-    public static void setBeaconListFromSharedPreferences(@NonNull Context context, @NonNull ArrayList<BeaconID> beaconList) {
+    private static void setBeaconListFromSharedPreferences(@NonNull Context context, @NonNull ArrayList<BeaconID> beaconList) {
         Gson gson = new Gson();
         String jsonBeaconList = gson.toJson(beaconList);
-
         SharedPreferences prefs = context.getSharedPreferences(Utils.class.getSimpleName(), Context.MODE_PRIVATE);
         prefs.edit().putString("BeaconList", jsonBeaconList).apply();
     }
@@ -82,10 +84,10 @@ public class Utils {
         Gson gson = new Gson();
         ArrayList<BeaconID> beaconsList;
         SharedPreferences prefs = context.getSharedPreferences(Utils.class.getSimpleName(), Context.MODE_PRIVATE);
-        Type type = new TypeToken<List<Notification>>() {
+        Type type = new TypeToken<List<BeaconID>>() {
         }.getType();
         beaconsList = gson.fromJson(prefs.getString("BeaconList", ""), type);
-        return beaconsList;
+        return beaconsList == null ? new ArrayList<BeaconID>() : beaconsList;
     }
 
     public static void clearBeaconListFromSharedPreferences(@NonNull Context context) {
@@ -94,8 +96,12 @@ public class Utils {
     }
 
     public static void addBeaconToSharedPreferences(@NonNull Context context, @NonNull BeaconID beacon) {
-        ArrayList<BeaconID> beaconList = new ArrayList<BeaconID>(getBeaconListFromSharedPreferences(context));
-        clearBeaconListFromSharedPreferences(context);
+        ArrayList<BeaconID> beaconList = getBeaconListFromSharedPreferences(context);
+        if (beaconList != null) {
+            clearBeaconListFromSharedPreferences(context);
+        } else {
+            beaconList = new ArrayList<>();
+        }
         beaconList.add(beacon);
         setBeaconListFromSharedPreferences(context, beaconList);
     }
