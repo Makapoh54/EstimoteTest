@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import estimote.com.estimotetest.estimote.BeaconID;
+import estimote.com.estimotetest.estimote.CustomBeacon;
 import estimote.com.estimotetest.utils.Utils;
 
 public class BeaconManagerSingleton {
@@ -32,7 +33,7 @@ public class BeaconManagerSingleton {
     }
 
     private BeaconManager mBeaconManager;
-    private List<BeaconID> mTrackedBeaconList = new ArrayList<>();
+    private List<CustomBeacon> mTrackedBeaconList = new ArrayList<>();
 
     private List<Notification> mNotificationsList;
     private Map<String, List<String>> mEnterMessages = new HashMap<>();
@@ -51,9 +52,9 @@ public class BeaconManagerSingleton {
         mBeaconManager.connect(new BeaconManager.ServiceReadyCallback() {
             @Override
             public void onServiceReady() {
-                for (BeaconID beaconId : mTrackedBeaconList) {
-                    Log.d("StartedMonitoring", beaconId.toString());
-                    mBeaconManager.startMonitoring(beaconId.toBeaconRegion());
+                for (CustomBeacon beaconId : mTrackedBeaconList) {
+                    Log.d("StartedMonitoring", beaconId.getBeaconId().toString());
+                    mBeaconManager.startMonitoring(beaconId.getBeaconId().toBeaconRegion());
                 }
             }
         });
@@ -72,11 +73,8 @@ public class BeaconManagerSingleton {
 
             @Override
             public void onExitedRegion(Region region) {
-
             }
-
         });
-
     }
 
     public Map<String, List<String>> getEnterMessages() {
@@ -88,8 +86,8 @@ public class BeaconManagerSingleton {
     }
 
     public void checkTouchedBeaconConsistency(final DeviceId deviceId) {
-        for (BeaconID beaconID : mTrackedBeaconList) {
-            if (beaconID.getDeviceId().equals(deviceId)) {
+        for (CustomBeacon beaconID : mTrackedBeaconList) {
+            if (beaconID.getBeaconId().getDeviceId().equals(deviceId)) {
                 return;
             }
         }
@@ -99,12 +97,13 @@ public class BeaconManagerSingleton {
             public void success(BeaconInfo beaconInfo) {
                 Log.d("Good", "cloud good");
                 BeaconID beaconID = new BeaconID(beaconInfo.uuid, beaconInfo.major, beaconInfo.minor, deviceId);
-                Utils.addBeaconToSharedPreferences(CustomApplication.getInstance(), beaconID);
+                CustomBeacon beacon = new CustomBeacon(beaconInfo.name, beaconInfo.color.toString(), beaconID, null);
+                Utils.addBeaconToSharedPreferences(CustomApplication.getInstance(), beacon);
                 if (mTrackedBeaconList != null) {
-                    mTrackedBeaconList.add(beaconID);
+                    mTrackedBeaconList.add(beacon);
                 } else {
-                    mTrackedBeaconList = new ArrayList<BeaconID>();
-                    mTrackedBeaconList.add(beaconID);
+                    mTrackedBeaconList = new ArrayList<CustomBeacon>();
+                    mTrackedBeaconList.add(beacon);
                 }
                 mBeaconManager.startMonitoring(beaconID.toBeaconRegion());
                 Log.d("StartedMonitoring", beaconID.toString());
@@ -117,7 +116,6 @@ public class BeaconManagerSingleton {
             }
         });
     }
-
 
     private void populateMessagesHashMap() {
         for (Notification notification : mNotificationsList) {

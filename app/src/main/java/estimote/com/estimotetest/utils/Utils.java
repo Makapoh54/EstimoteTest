@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import estimote.com.estimotetest.Notification;
-import estimote.com.estimotetest.estimote.BeaconID;
+import estimote.com.estimotetest.estimote.CustomBeacon;
 
 public class Utils {
 
@@ -73,21 +73,21 @@ public class Utils {
         setNotificationFromSharedPreferences(context, notificationsList);
     }
 
-    private static void setBeaconListFromSharedPreferences(@NonNull Context context, @NonNull ArrayList<BeaconID> beaconList) {
+    private static void setBeaconListFromSharedPreferences(@NonNull Context context, @NonNull ArrayList<CustomBeacon> customBeaconList) {
         Gson gson = new Gson();
-        String jsonBeaconList = gson.toJson(beaconList);
+        String jsonBeaconList = gson.toJson(customBeaconList);
         SharedPreferences prefs = context.getSharedPreferences(Utils.class.getSimpleName(), Context.MODE_PRIVATE);
         prefs.edit().putString("BeaconList", jsonBeaconList).apply();
     }
 
-    public static ArrayList<BeaconID> getBeaconListFromSharedPreferences(@NonNull Context context) {
+    public static ArrayList<CustomBeacon> getBeaconListFromSharedPreferences(@NonNull Context context) {
         Gson gson = new Gson();
-        ArrayList<BeaconID> beaconsList;
+        ArrayList<CustomBeacon> beaconsList;
         SharedPreferences prefs = context.getSharedPreferences(Utils.class.getSimpleName(), Context.MODE_PRIVATE);
-        Type type = new TypeToken<List<BeaconID>>() {
+        Type type = new TypeToken<List<CustomBeacon>>() {
         }.getType();
         beaconsList = gson.fromJson(prefs.getString("BeaconList", ""), type);
-        return beaconsList == null ? new ArrayList<BeaconID>() : beaconsList;
+        return beaconsList == null ? new ArrayList<CustomBeacon>() : beaconsList;
     }
 
     public static void clearBeaconListFromSharedPreferences(@NonNull Context context) {
@@ -95,14 +95,14 @@ public class Utils {
         prefs.edit().remove("BeaconList").apply();
     }
 
-    public static void addBeaconToSharedPreferences(@NonNull Context context, @NonNull BeaconID beacon) {
-        ArrayList<BeaconID> beaconList = getBeaconListFromSharedPreferences(context);
-        if (beaconList != null) {
+    public static void addBeaconToSharedPreferences(@NonNull Context context, @NonNull CustomBeacon customBeacon) {
+        ArrayList<CustomBeacon> customBeaconList = getBeaconListFromSharedPreferences(context);
+        if (customBeaconList != null) {
             clearBeaconListFromSharedPreferences(context);
         } else {
-            beaconList = new ArrayList<>();
+            customBeaconList = new ArrayList<>();
         }
-        beaconList.add(beacon);
-        setBeaconListFromSharedPreferences(context, beaconList);
+        customBeaconList.add(customBeacon);
+        setBeaconListFromSharedPreferences(context, customBeaconList);
     }
 }

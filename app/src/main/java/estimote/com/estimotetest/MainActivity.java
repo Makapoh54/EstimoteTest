@@ -5,36 +5,37 @@ import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.TextView;
 
 import com.estimote.sdk.DeviceId;
-import com.estimote.sdk.Region;
 import com.estimote.sdk.SystemRequirementsChecker;
 
 import java.nio.charset.Charset;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
+import estimote.com.estimotetest.adapter.SampleFragmentPagerAdapter;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Region mRegion;
-
-    @BindView(R.id.beacon_status_tv)
-    TextView mBeaconStatusTv;
-    @BindView(R.id.beacon_distance_tv)
-    TextView mBeaconDistanceTv;
-    @BindView(R.id.beacons_around_tv)
-    TextView mBeaconsAroundTv;
+    private Unbinder mUnbinder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ButterKnife.bind(this);
-        BeaconManagerSingleton.getInstance();
+        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+        viewPager.setAdapter(new SampleFragmentPagerAdapter(getSupportFragmentManager(),
+                MainActivity.this));
+
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
+        tabLayout.setupWithViewPager(viewPager);
+
+        mUnbinder = ButterKnife.bind(this);
+        //BeaconManagerSingleton.getInstance();
     }
 
     @Override
@@ -69,5 +70,11 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         return null;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mUnbinder.unbind();
     }
 }
