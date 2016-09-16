@@ -27,8 +27,7 @@ public class BeaconsFragment extends Fragment {
     private BeaconsListAdapter mBeaconsListAdapter;
 
     public static BeaconsFragment newInstance() {
-        BeaconsFragment fragment = new BeaconsFragment();
-        return fragment;
+        return new BeaconsFragment();
     }
 
     @Override

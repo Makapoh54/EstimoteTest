@@ -1,7 +1,6 @@
 package estimote.com.estimotetest.adapter;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,10 +48,12 @@ public class BeaconsListAdapter extends RecyclerView.Adapter<BeaconsListAdapter.
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         final CustomBeacon customBeacon = mCustomBeaconList.get(position);
-        Drawable myIcon;
         switch (customBeacon.getColor()) {
             case ("Mint Cocktail"):
-                Picasso.with(mContext).load(R.drawable.green_beacon).into(holder.mIcon);
+                Picasso.with(mContext)
+                        .load(R.drawable.green_beacon)
+                        .into(holder.mIcon);
+
                 break;
             case ("Blueberry Pie"):
                 Picasso.with(mContext).load(R.drawable.purple_beacon).into(holder.mIcon);

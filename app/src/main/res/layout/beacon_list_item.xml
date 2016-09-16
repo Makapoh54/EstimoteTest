@@ -4,13 +4,15 @@
                 android:layout_height="wrap_content"
                 android:paddingBottom="10dp"
                 android:paddingLeft="@dimen/activity_vertical_margin"
+                android:background="@android:color/white"
                 android:paddingRight="@dimen/activity_vertical_margin"
                 android:paddingTop="10dp">
 
     <ImageView
         android:id="@+id/iv_icon"
-        android:layout_width="64dp"
+        android:layout_width="44dp"
         android:layout_height="64dp"
+        android:background="@drawable/green_beacon"
         android:layout_alignParentLeft="true"
         android:layout_centerInParent="true"
         android:layout_marginRight="10dp"/>
@@ -35,13 +37,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/tv_name"
-
             android:text="BeaconID"/>
 
         <TextView
             android:id="@+id/tv_location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:layout_below="@+id/tv_beacon_id"
             android:text="LOCATION"/>
 

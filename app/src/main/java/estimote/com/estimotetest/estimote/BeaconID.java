@@ -53,7 +53,7 @@ public class BeaconID {
     }
 
     public String toString() {
-        return getProximityUUID().toString() + ":" + getMajor() + ":" + getMinor();
+        return getProximityUUID().toString() + ":" + getMajor() + ":" + getMinor() + ":" + getDeviceId().toString();
     }
 
     @Override

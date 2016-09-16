@@ -49,13 +49,10 @@ public class BeaconManagerSingleton {
 
         //populateMessagesHashMap();
 
-        mBeaconManager.connect(new BeaconManager.ServiceReadyCallback() {
-            @Override
-            public void onServiceReady() {
-                for (CustomBeacon beaconId : mTrackedBeaconList) {
-                    Log.d("StartedMonitoring", beaconId.getBeaconId().toString());
-                    mBeaconManager.startMonitoring(beaconId.getBeaconId().toBeaconRegion());
-                }
+        mBeaconManager.connect(() -> {
+            for (CustomBeacon beaconId : mTrackedBeaconList) {
+                Log.d("StartedMonitoring", beaconId.getBeaconId().toString());
+                mBeaconManager.startMonitoring(beaconId.getBeaconId().toBeaconRegion());
             }
         });
 

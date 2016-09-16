@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
 
         mUnbinder = ButterKnife.bind(this);
-        //BeaconManagerSingleton.getInstance();
+        BeaconManagerSingleton.getInstance();
     }
 
     @Override

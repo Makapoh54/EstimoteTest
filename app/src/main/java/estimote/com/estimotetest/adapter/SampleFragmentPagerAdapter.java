@@ -6,7 +6,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import estimote.com.estimotetest.fragment.BeaconsFragment;
-import estimote.com.estimotetest.fragment.PageFragment;
+import estimote.com.estimotetest.fragment.NoteListFragment;
 
 public class SampleFragmentPagerAdapter extends FragmentPagerAdapter {
 
@@ -30,7 +30,7 @@ public class SampleFragmentPagerAdapter extends FragmentPagerAdapter {
             case (1):
                 return BeaconsFragment.newInstance();
             default:
-                return PageFragment.newInstance(position + 1);
+                return NoteListFragment.newInstance();
         }
     }
 
