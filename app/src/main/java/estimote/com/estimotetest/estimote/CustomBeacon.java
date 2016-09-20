@@ -14,6 +14,9 @@ public class CustomBeacon {
         this.location = location;
     }
 
+    public CustomBeacon() {
+    }
+
     public String getName() {
         return name;
     }

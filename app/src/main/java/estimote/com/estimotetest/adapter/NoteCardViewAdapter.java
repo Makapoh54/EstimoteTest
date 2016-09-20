@@ -32,7 +32,7 @@ public class NoteCardViewAdapter extends RecyclerView.Adapter<NoteCardViewAdapte
     }
 
     public Note getItem(int position) {
-        return mPostList.get(position);
+        return new ArrayList<Note>(mPostList.values()).get(position);
     }
 
     public LinkedHashMap<String, Note> getPostList() {

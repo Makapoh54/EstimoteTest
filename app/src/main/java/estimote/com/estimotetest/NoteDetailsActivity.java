@@ -57,8 +57,8 @@ public class NoteDetailsActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         saveNote();
+        super.onBackPressed();
     }
 
     private void saveNote() {
@@ -70,7 +70,6 @@ public class NoteDetailsActivity extends AppCompatActivity {
             Intent returnIntent = new Intent(this, NoteListFragment.class);
             returnIntent.putExtra(NOTE, mNote);
             setResult(Activity.RESULT_OK, returnIntent);
-            finish();
         } else if (mRequestCode == (Constant.NOTE_EDIT_REQUEST)) {
             mNote.setTitle(mPostTitle.getText().toString());
             mNote.setContent(mPostContent.getText().toString());
@@ -78,8 +77,6 @@ public class NoteDetailsActivity extends AppCompatActivity {
             Intent returnIntent = new Intent(this, NoteListFragment.class);
             returnIntent.putExtra(NOTE, mNote);
             setResult(Activity.RESULT_OK, returnIntent);
-            finish();
-
         }
     }
 

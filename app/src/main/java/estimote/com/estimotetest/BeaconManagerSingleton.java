@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import estimote.com.estimotetest.database.FirebaseDb;
 import estimote.com.estimotetest.estimote.BeaconID;
 import estimote.com.estimotetest.estimote.CustomBeacon;
 import estimote.com.estimotetest.utils.Utils;
@@ -95,7 +96,7 @@ public class BeaconManagerSingleton {
                 Log.d("Good", "cloud good");
                 BeaconID beaconID = new BeaconID(beaconInfo.uuid, beaconInfo.major, beaconInfo.minor, deviceId);
                 CustomBeacon beacon = new CustomBeacon(beaconInfo.name, beaconInfo.color.toString(), beaconID, null);
-                Utils.addBeaconToSharedPreferences(CustomApplication.getInstance(), beacon);
+                FirebaseDb.createBeacon(beacon);
                 if (mTrackedBeaconList != null) {
                     mTrackedBeaconList.add(beacon);
                 } else {

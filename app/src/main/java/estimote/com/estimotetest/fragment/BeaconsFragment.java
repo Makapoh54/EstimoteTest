@@ -13,7 +13,9 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import estimote.com.estimotetest.R;
 import estimote.com.estimotetest.adapter.BeaconsListAdapter;
-import estimote.com.estimotetest.utils.Utils;
+import estimote.com.estimotetest.database.FirebaseDb;
+
+import static estimote.com.estimotetest.database.Snapshot.toBeacons;
 
 public class BeaconsFragment extends Fragment {
 
@@ -40,24 +42,16 @@ public class BeaconsFragment extends Fragment {
                              Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_beacons, container, false);
         mUnbinder = ButterKnife.bind(this, rootView);
-
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mBeaconsListAdapter = new BeaconsListAdapter(getContext(), Utils.getBeaconListFromSharedPreferences(getContext()));
-        mRecyclerView.setAdapter(mBeaconsListAdapter);
+        beaconListListener();
         return rootView;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        if(mRecyclerView != null && mBeaconsListAdapter != null){
-            ((BeaconsListAdapter) mRecyclerView.getAdapter()).setNewItems(Utils.getBeaconListFromSharedPreferences(getContext()));
-        } else {
+    private void beaconListListener(){
+        FirebaseDb.getAllBeacons(snapshot -> {
             mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-            mBeaconsListAdapter = new BeaconsListAdapter(getContext(), Utils.getBeaconListFromSharedPreferences(getContext()));
+            mBeaconsListAdapter = new BeaconsListAdapter(getContext(), toBeacons(snapshot));
             mRecyclerView.setAdapter(mBeaconsListAdapter);
-        }
+        });
     }
 
     @Override

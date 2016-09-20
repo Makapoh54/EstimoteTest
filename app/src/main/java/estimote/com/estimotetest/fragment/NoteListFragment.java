@@ -27,7 +27,6 @@ import static estimote.com.estimotetest.NoteDetailsActivity.NOTE;
 import static estimote.com.estimotetest.database.Snapshot.toPosts;
 
 public class NoteListFragment extends Fragment {
-    public static final String ARG_PAGE = "ARG_PAGE";
 
     @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;
@@ -61,7 +60,7 @@ public class NoteListFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == Constant.NOTE_CREATE_REQUEST) {
             if (resultCode == Activity.RESULT_OK) {
                 FirebaseDb.createPost((Note) data.getSerializableExtra(NOTE));

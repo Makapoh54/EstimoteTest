@@ -1,10 +1,16 @@
 package estimote.com.estimotetest;
 
 import android.content.Intent;
+import android.nfc.NdefMessage;
+import android.nfc.NdefRecord;
+import android.nfc.NfcAdapter;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 
+import com.estimote.sdk.DeviceId;
+import com.estimote.sdk.SystemRequirementsChecker;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -16,6 +22,8 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
+
+import java.nio.charset.Charset;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -31,8 +39,7 @@ public class LogInActivity extends AppCompatActivity implements GoogleApiClient.
 
     @OnClick(R.id.sign_in_button)
     public void signInOnClick() {
-        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleClient);
-        startActivityForResult(signInIntent, signInCode);
+        signInIntent();
     }
 
     private GoogleApiClient mGoogleClient;
@@ -46,7 +53,13 @@ public class LogInActivity extends AppCompatActivity implements GoogleApiClient.
         mGoogleClient = new GoogleApiClient.Builder(this).enableAutoManage(this, this::onConnectionFailed)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, buildSignInOptions())
                 .build();
+        signInIntent();
 
+    }
+
+    private void signInIntent(){
+        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleClient);
+        startActivityForResult(signInIntent, signInCode);
     }
 
     private GoogleSignInOptions buildSignInOptions() {
@@ -64,6 +77,41 @@ public class LogInActivity extends AppCompatActivity implements GoogleApiClient.
             signOut();
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        SystemRequirementsChecker.checkWithDefaultDialogs(this);
+
+        if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(getIntent().getAction())) {
+            Parcelable[] rawMsgs = getIntent().getParcelableArrayExtra(
+                    NfcAdapter.EXTRA_NDEF_MESSAGES);
+            if (rawMsgs != null) {
+                for (int i = 0; i < rawMsgs.length; i++) {
+                    NdefMessage msg = (NdefMessage) rawMsgs[i];
+                    DeviceId beaconId = findBeaconId(msg);
+                    if (beaconId != null) {
+                        BeaconManagerSingleton.getInstance().checkTouchedBeaconConsistency(beaconId);
+                        signInIntent();
+                    }
+                }
+            }
+        }
+    }
+
+    private static DeviceId findBeaconId(NdefMessage msg) {
+        NdefRecord[] records = msg.getRecords();
+        for (NdefRecord record : records) {
+            if (record.getTnf() == NdefRecord.TNF_EXTERNAL_TYPE) {
+                String type = new String(record.getType(), Charset.forName("ascii"));
+                if ("estimote.com:id".equals(type)) {
+                    return DeviceId.fromBytes(record.getPayload());
+                }
+            }
+        }
+        return null;
     }
 
     private void signIn(Intent data) {

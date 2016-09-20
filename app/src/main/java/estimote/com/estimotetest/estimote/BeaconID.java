@@ -24,6 +24,10 @@ public class BeaconID {
         this(UUID.fromString(UUIDString), major, minor, deviceId);
     }
 
+    public BeaconID(String UUIDString, int major, int minor, String deviceId) {
+        this(UUID.fromString(UUIDString), major, minor, DeviceId.fromString(deviceId));
+    }
+
     public BeaconID(Beacon beacon) {
         this(beacon.getProximityUUID(), beacon.getMajor(), beacon.getMinor(), null);
     }
@@ -40,6 +44,22 @@ public class BeaconID {
         return minor;
     }
 
+    public void setProximityUUID(UUID proximityUUID) {
+        this.proximityUUID = proximityUUID;
+    }
+
+    public void setMajor(int major) {
+        this.major = major;
+    }
+
+    public void setMinor(int minor) {
+        this.minor = minor;
+    }
+
+    public void setDeviceId(DeviceId deviceId) {
+        this.deviceId = deviceId;
+    }
+
     public DeviceId getDeviceId() {
         return deviceId;
     }
@@ -53,7 +73,16 @@ public class BeaconID {
     }
 
     public String toString() {
-        return getProximityUUID().toString() + ":" + getMajor() + ":" + getMinor() + ":" + getDeviceId().toString();
+        return getProximityUUID().toString() + ":" + getMajor() + ":" + getMinor() + ":" + getDeviceId();
+    }
+
+    public String toKey() {
+        return getProximityUUID().toString() + ":" + getMajor() + ":" + getMinor();
+    }
+
+    public BeaconID fromString(String beaconID) {
+        String[] separated = beaconID.split(":");
+        return new BeaconID(separated[0], Integer.valueOf(separated[1]), Integer.valueOf(separated[2]), separated[3]);
     }
 
     @Override

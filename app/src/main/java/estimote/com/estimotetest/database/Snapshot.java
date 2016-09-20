@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import estimote.com.estimotetest.estimote.CustomBeacon;
 import estimote.com.estimotetest.model.Note;
 import estimote.com.estimotetest.model.User;
 
@@ -28,5 +29,13 @@ public final class Snapshot {
             postList.put(snapshot.getKey(), note);
         }
         return postList;
+    }
+
+    public static ArrayList<CustomBeacon> toBeacons(DataSnapshot dataSnapshot) {
+        ArrayList<CustomBeacon> beaconList = new ArrayList<>();
+        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+            beaconList.add(snapshot.getValue(CustomBeacon.class));
+        }
+        return beaconList;
     }
 }

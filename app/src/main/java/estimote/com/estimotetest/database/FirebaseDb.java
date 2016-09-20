@@ -5,6 +5,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
+import estimote.com.estimotetest.estimote.CustomBeacon;
 import estimote.com.estimotetest.model.Note;
 import estimote.com.estimotetest.model.User;
 import java8.util.function.Consumer;
@@ -12,6 +13,7 @@ import java8.util.function.Consumer;
 
 public final class FirebaseDb {
     private static final String post = "post";
+    private static final String beacon = "beacon";
     private static final String users = "users";
     private static final String creationTime = "creationTime";
     private static final String collection = "collection";
@@ -28,6 +30,10 @@ public final class FirebaseDb {
 
     public static void getAllPosts(Consumer<DataSnapshot> onValue) {
         db().child(post).orderByChild(creationTime).addValueEventListener(new OnSingleValue(onValue));
+    }
+
+    public static void getAllBeacons(Consumer<DataSnapshot> onValue) {
+        db().child(beacon).addValueEventListener(new OnSingleValue(onValue));
     }
 
     public static void createUser(String uid, User user) {
@@ -52,6 +58,18 @@ public final class FirebaseDb {
 
     public static void updatePost(String taskKey, Note newNote) {
         db().child(post).child(taskKey).setValue(newNote);
+    }
+
+    public static void createBeacon(CustomBeacon newBeacon) {
+        db().child(beacon).child(newBeacon.getBeaconId().toKey()).setValue(newBeacon);
+    }
+
+    public static void deleteBeacon(String beaconKey) {
+        db().child(beacon).child(beaconKey).removeValue();
+    }
+
+    public static void updateBeacon(String beaconKey, CustomBeacon newBeacon) {
+        db().child(beacon).child(beaconKey).setValue(newBeacon);
     }
 
     public static void getPostByKey(String taskKey, Consumer<DataSnapshot> onValue) {
