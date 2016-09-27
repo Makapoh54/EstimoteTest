@@ -83,7 +83,7 @@ public class BeaconManagerSingleton {
         return mBeaconManager;
     }
 
-    public void checkTouchedBeaconConsistency(final DeviceId deviceId) {
+    public void addBeaconToList(final DeviceId deviceId) {
         for (CustomBeacon beaconID : mTrackedBeaconList) {
             if (beaconID.getBeaconId().getDeviceId().equals(deviceId)) {
                 return;

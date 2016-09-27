@@ -53,8 +53,12 @@ public class LogInActivity extends AppCompatActivity implements GoogleApiClient.
         mGoogleClient = new GoogleApiClient.Builder(this).enableAutoManage(this, this::onConnectionFailed)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, buildSignInOptions())
                 .build();
-        signInIntent();
+    }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        signInIntent();
     }
 
     private void signInIntent(){
@@ -93,7 +97,7 @@ public class LogInActivity extends AppCompatActivity implements GoogleApiClient.
                     NdefMessage msg = (NdefMessage) rawMsgs[i];
                     DeviceId beaconId = findBeaconId(msg);
                     if (beaconId != null) {
-                        BeaconManagerSingleton.getInstance().checkTouchedBeaconConsistency(beaconId);
+                        BeaconManagerSingleton.getInstance().addBeaconToList(beaconId);
                         signInIntent();
                     }
                 }
