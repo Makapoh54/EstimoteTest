@@ -53,7 +53,7 @@ public class BeaconManagerSingleton {
         mBeaconManager.connect(() -> {
             for (CustomBeacon beaconId : mTrackedBeaconList) {
                 Log.d("StartedMonitoring", beaconId.getBeaconId().toString());
-                mBeaconManager.startMonitoring(beaconId.getBeaconId().toBeaconRegion());
+                mBeaconManager.startMonitoring(BeaconID.fromString(beaconId.getBeaconId()).toBeaconRegion());
             }
         });
 
@@ -84,18 +84,18 @@ public class BeaconManagerSingleton {
     }
 
     public void addBeaconToList(final DeviceId deviceId) {
-        for (CustomBeacon beaconID : mTrackedBeaconList) {
+        /*for (CustomBeacon beaconID : mTrackedBeaconList) {
             if (beaconID.getBeaconId().getDeviceId().equals(deviceId)) {
                 return;
             }
-        }
+        }*/
         EstimoteCloud.getInstance().fetchBeaconDetails(deviceId, new CloudCallback<BeaconInfo>() {
 
             @Override
             public void success(BeaconInfo beaconInfo) {
                 Log.d("Good", "cloud good");
                 BeaconID beaconID = new BeaconID(beaconInfo.uuid, beaconInfo.major, beaconInfo.minor, deviceId);
-                CustomBeacon beacon = new CustomBeacon(beaconInfo.name, beaconInfo.color.toString(), beaconID, null);
+                CustomBeacon beacon = new CustomBeacon(beaconInfo.name, beaconInfo.color.toString(), beaconID.toString());
                 FirebaseDb.createBeacon(beacon);
                 if (mTrackedBeaconList != null) {
                     mTrackedBeaconList.add(beacon);
