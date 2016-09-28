@@ -61,7 +61,7 @@ public final class FirebaseDb {
     }
 
     public static void createBeacon(CustomBeacon newBeacon) {
-        db().child(beacon).child(newBeacon.getBeaconId().toKey()).setValue(newBeacon);
+        db().child(beacon).push().setValue(newBeacon);
     }
 
     public static void deleteBeacon(String beaconKey) {

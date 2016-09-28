@@ -64,9 +64,7 @@ public class BeaconsListAdapter extends RecyclerView.Adapter<BeaconsListAdapter.
         }
         holder.mName.setText(customBeacon.getName());
         holder.mId.setText(customBeacon.getBeaconId().toString());
-        if (customBeacon.getLocation() != null) {
-            holder.mLocation.setText(customBeacon.getLocation());
-        }
+
         holder.itemView.setOnClickListener(BeaconsFragment.onBeaconClickListener);
     }
 

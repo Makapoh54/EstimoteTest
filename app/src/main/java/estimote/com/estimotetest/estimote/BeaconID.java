@@ -80,7 +80,7 @@ public class BeaconID {
         return getProximityUUID().toString() + ":" + getMajor() + ":" + getMinor();
     }
 
-    public BeaconID fromString(String beaconID) {
+    public static BeaconID fromString(String beaconID) {
         String[] separated = beaconID.split(":");
         return new BeaconID(separated[0], Integer.valueOf(separated[1]), Integer.valueOf(separated[2]), separated[3]);
     }

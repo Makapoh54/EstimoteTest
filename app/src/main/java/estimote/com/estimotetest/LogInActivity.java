@@ -98,7 +98,6 @@ public class LogInActivity extends AppCompatActivity implements GoogleApiClient.
                     DeviceId beaconId = findBeaconId(msg);
                     if (beaconId != null) {
                         BeaconManagerSingleton.getInstance().addBeaconToList(beaconId);
-                        signInIntent();
                     }
                 }
             }

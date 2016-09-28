@@ -2,16 +2,14 @@ package estimote.com.estimotetest.estimote;
 
 public class CustomBeacon {
 
-    private String name;
-    private String color;
-    private BeaconID beaconId;
-    private String location;
+    public String name;
+    public String color;
+    public String beaconId;
 
-    public CustomBeacon(String name, String color, BeaconID beaconId, String location) {
+    public CustomBeacon(String name, String color, String beaconId) {
         this.name = name;
         this.color = color;
         this.beaconId = beaconId;
-        this.location = location;
     }
 
     public CustomBeacon() {
@@ -33,19 +31,11 @@ public class CustomBeacon {
         this.color = color;
     }
 
-    public BeaconID getBeaconId() {
+    public String getBeaconId() {
         return beaconId;
     }
 
-    public void setBeaconId(BeaconID beaconId) {
+    public void setBeaconId(String beaconId) {
         this.beaconId = beaconId;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
     }
 }

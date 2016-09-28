@@ -90,7 +90,6 @@ public class NoteListFragment extends Fragment {
         });
     }
 
-
     private void createPost(String title, String content) {
         Note note = new Note(title, content, ISO8601DateTime.now(), "ads");
         FirebaseDb.createPost(note);
